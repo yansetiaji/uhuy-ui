@@ -18,4 +18,9 @@ export default defineNuxtConfig({
   devServer: {
     host: '0.0.0.0',
   },
+  runtimeConfig: {
+    public: {
+      backendHost: process.env.BACKEND_HOST,
+    }
+  },
 })

@@ -14,7 +14,7 @@ const props = defineProps({
 <template>
 	<NuxtLink
 		:to="linkTo"
-		class="text-center px-5 py-2 rounded-full bg-black text-white hover:bg-gray-400 hover:text-black"
+		class="text-black px-2 py-1 rounded-full hover:bg-black hover:text-white"
 		>{{ linkText }}</NuxtLink
 	>
 </template>

@@ -1,4 +1,6 @@
 <script setup>
+import ConfirmDeleteModal from "./ConfirmDeleteModal.vue";
+
 const props = defineProps({
 	productsData: {
 		type: Object,
@@ -18,7 +20,7 @@ const toggleDropdown = (index) => {
 <template>
 	<div class="overflow-x-auto w-full">
 		<table class="table-fixed mx-10 border-collapse">
-			<thead class="border-b-2">
+			<thead class="border-b-4">
 				<tr class="justify-between">
 					<th class="text-left w-3/12 p-4">Name</th>
 					<th class="text-left w-6/12 p-4">Desciption</th>
@@ -27,7 +29,11 @@ const toggleDropdown = (index) => {
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(product, index) in productsData" :key="product.id">
+				<tr
+					v-for="(product, index) in productsData"
+					:key="product.id"
+					class="border-b-2"
+				>
 					<td class="px-4 py-2">{{ product.name }}</td>
 					<td class="px-4 py-2">{{ product.description }}</td>
 					<td class="px-4 py-2">{{ product.price.toFixed(2) }}</td>
@@ -37,7 +43,7 @@ const toggleDropdown = (index) => {
 						</button>
 						<ul
 							v-if="openDropdown === index"
-							class="absolute top-10 right-1 bg-white border-2 p-3 z-[1000] flex-col rounded-lg"
+							class="absolute top-3/4 right-1/2 bg-white border-2 p-3 z-[1000] flex-col rounded-lg"
 						>
 							<li>
 								<button class="flex px-4 py-2">
@@ -55,5 +61,6 @@ const toggleDropdown = (index) => {
 				</tr>
 			</tbody>
 		</table>
+		<ConfirmDeleteModal />
 	</div>
 </template>
