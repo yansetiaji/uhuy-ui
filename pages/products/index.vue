@@ -123,10 +123,13 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 								class="absolute top-3/4 right-1/2 bg-white border-2 p-3 z-[1000] flex-col rounded-lg"
 							>
 								<li>
-									<button class="flex items-center px-4 py-2">
+									<NuxtLink
+										:to="`/products/edit/${product.id}`"
+										class="flex items-center px-4 py-2"
+									>
 										<i class="pi pi-pencil pr-3"></i>
 										<p class="text-l">Edit</p>
-									</button>
+									</NuxtLink>
 								</li>
 								<li>
 									<button class="flex items-center px-4 py-2">
@@ -145,8 +148,8 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 			<div class="flex items-center justify-end mt-6 mr-10 pb-6">
 				<!-- Rows per page options -->
 				<div class="flex items-center border-2 rounded-md py-1 px-2 m-3">
-					<p class="border-r-2 pr-2">Rows per page</p>
-					<form class="border-l-2 pl-1">
+					<p class="pr-2">Rows per page:</p>
+					<form class="pl-1">
 						<label for="rows-per-page"></label>
 						<select
 							id="rows-per-page"
@@ -172,10 +175,10 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 				<!-- Page navigation -->
 				<div class="border-2 rounded-md py-1 mx-3">
 					<button @click="changePageNum(-1)">
-						<i class="pi pi-angle-double-left px-3 border-r-2"></i>
+						<i class="pi pi-angle-double-left px-3"></i>
 					</button>
 					<button @click="changePageNum(1)">
-						<i class="pi pi-angle-double-right px-3 border-l-2"></i>
+						<i class="pi pi-angle-double-right px-3"></i>
 					</button>
 				</div>
 			</div>

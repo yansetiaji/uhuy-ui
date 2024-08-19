@@ -1,6 +1,8 @@
 <template>
 	<!-- Page Title -->
-	<h2 class="text-black text-2xl bg-gray-100 py-6">Edit Product</h2>
+	<h2 class="text-black text-2xl bg-gray-100 py-6">
+		Edit Product {{ inputName }}
+	</h2>
 	<!-- Overall Form Background -->
 	<div class="bg-white rounded-lg w-full">
 		<!-- All Form Component -->
@@ -71,16 +73,27 @@
 	</div>
 </template>
 <script setup>
+const route = useRoute();
 const backendHost = useRuntimeConfig().public.backendHost;
 const inputNameWarning = useState("inputNameWarning", () => null);
 const inputDescriptionWarning = useState("inputDescriptionWarning", () => null);
-const inputName = useState("inputName", () => null);
-const inputDescription = useState("inputDescription", () => null);
-const inputPrice = useState("inputPrice", () => null);
 
 const submissionStatus = ref("");
 const submissionMessage = ref("");
 const isSubmitting = ref(false);
+
+// Get current value before editing
+const { error, data, status } = await useFetch(
+	`${backendHost}/api/products/${route.params.id}`,
+	{
+		method: "GET",
+	}
+);
+
+const inputName = ref(data.value.Name);
+const inputDescription = ref(data.value.Description);
+const inputPrice = ref(data.value.Price);
+
 // // Banned input chars
 var bannedCharsDict = {};
 
@@ -128,9 +141,9 @@ const filterInput = (event) => {
 const handleSubmit = async () => {
 	isSubmitting.value = true;
 	const { error, data, status } = await useFetch(
-		`${backendHost}/api/products`,
+		`${backendHost}/api/products/${route.params.id}`,
 		{
-			method: "POST",
+			method: "PUT",
 			body: {
 				name: inputName,
 				description: inputDescription,
