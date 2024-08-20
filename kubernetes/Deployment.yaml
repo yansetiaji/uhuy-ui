@@ -22,5 +22,5 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   name: uhuy-ui-configmap 
-                  key: BACKEND_HOST
+                  key: NUXT_PUBLIC_BACKEND_HOST
 

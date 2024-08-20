@@ -3,6 +3,9 @@ kind: Ingress
 metadata:
   name: uhuy-ui-ingress
 spec:
+  tls:
+    - hosts:
+      - uhuy-ui.cicicuit.tech
   rules:
     - host: uhuy-ui.cicicuit.tech
       http:

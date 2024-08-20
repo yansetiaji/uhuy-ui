@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      backendHost: process.env.BACKEND_HOST,
+      backendHost: "",
     }
   },
 })

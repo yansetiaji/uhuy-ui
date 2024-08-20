@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: uhuy-ui-configmap
 data:
-  BACKEND_HOST: "http://uhuy-service.cicicuit.tech"
+  NUXT_PUBLIC_BACKEND_HOST: "http://uhuy-service.cicicuit.tech"

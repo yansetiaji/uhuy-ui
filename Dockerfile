@@ -3,6 +3,7 @@ WORKDIR /usr/src/app
 
 FROM base AS build
 COPY . .
+RUN bun install
 RUN bun run build
 
 FROM base
