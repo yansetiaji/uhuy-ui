@@ -3,23 +3,39 @@ import { onClickOutside } from "@vueuse/core";
 
 // Backend API (initial fetch)
 const backendHost = useRuntimeConfig().public.backendHost;
-
 const pageNumber = ref(1);
 const rowsPerPage = ref(5);
-const sort = ref("");
-const sortBy = ref("");
-const { status, data: products } = await useLazyFetch(
-	`${backendHost}/api/products?page=${pageNumber}&limit=${rowsPerPage.value}&sort=${sort.value}&sortBy=${sortBy.value}`
+const { status, data: products } = useLazyFetch(
+	`${backendHost}/api/products?page=${pageNumber}&limit=${rowsPerPage.value}`
 );
 
 // Handle row per page selection
 watch(rowsPerPage, async () => {
 	pageNumber.value = 1;
 	const newProducts = await $fetch(
-		`${backendHost}/api/products?page=${pageNumber.value}&limit=${rowsPerPage.value}&sort=${sort.value}&sortBy=${sortBy.value}`
+		`${backendHost}/api/products?page=${pageNumber.value}&limit=${rowsPerPage.value}`
 	);
 	products.value = newProducts;
 });
+
+// Handle emit update
+const updateData = async (value) => {
+	console.log("lagi update", value);
+	try {
+		const newProducts = await $fetch(
+			`${backendHost}/api/products?page=${pageNumber.value}&limit=${rowsPerPage.value}`
+		);
+		products.value = newProducts;
+		console.log(newProducts);
+		openDeleteModal.value = false;
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// const updateData = (value) => {
+// 	console.log("Parent received update:", value);
+// };
 
 // Handle pageNumber change
 const changePageNum = (num) => {
@@ -37,11 +53,11 @@ const changePageNum = (num) => {
 watch(pageNumber, async () => {
 	try {
 		const newProducts = await $fetch(
-			`${backendHost}/api/products?page=${pageNumber.value}&limit=${rowsPerPage.value}&sort=${sort.value}&sortBy=${sortBy.value}`
+			`${backendHost}/api/products?page=${pageNumber.value}&limit=${rowsPerPage.value}`
 		);
 		products.value = newProducts;
 	} catch (error) {
-		console.log(error, newProducts);
+		console.log(error);
 	}
 });
 
@@ -55,28 +71,57 @@ const toggleDropdown = (index) => {
 	}
 };
 
-// Toggle sort by
+// Toggle data deletion
+const showModal = ref(false);
+const openDeleteModal = useState("openDeleteModal", () => false);
+const toBeDeletedId = useState("toBeDeletedId", () => null);
+const toBeDeletedName = useState("toBeDeletedName", () => null);
+const toggleDeleteModal = (productId, productName) => {
+	toBeDeletedName.value = productName;
+	toBeDeletedId.value = productId;
+	openDeleteModal.value = true;
+	// showModal.value = true;
+};
 
 // Pagination Bar Dropdown
-const openPaginationDropdown = useState("openPaginationDropdown", () => null);
-const togglePaginationDropdown = () => {
-	openPaginationDropdown.value = !openPaginationDropdown.value;
-};
+// const openPaginationDropdown = useState("openPaginationDropdown", () => null);
+// const togglePaginationDropdown = () => {
+// 	openPaginationDropdown.value = !openPaginationDropdown.value;
+// };
 
 // Row dropdown removal using vueUse onClickOutside
 // This will help to remove row dropdown if we click outside the row dropdown
 // https://vueuse.org/core/onClickOutside/
 const rowDropdown = useState("rowDropdown", () => null);
-const paginationDropdown = useState("paginationDropdown", () => null);
+// const paginationDropdown = useState("paginationDropdown", () => null);
+// const deleteModal = useState("deleteModal", () => null);
 onClickOutside(rowDropdown, () => (openDropdown.value = false));
-onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
+// onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
+// onClickOutside(deleteModal, () => {
+// 	console.log("oco");
+// 	// openDeleteModal.value = false;
+// 	// toBeDeletedId.value = null;
+// });
 // console.log(products.value.totalLength);
 </script>
 
 <template>
 	<!-- Page Title -->
 	<h2 class="text-black text-2xl bg-gray-100 py-6">Products</h2>
+	<TestComponent @halooo="updateData" />
 	<!-- Table Background -->
+	<!-- Delete modal -->
+	<div>
+		<TestModal
+			v-if="openDeleteModal"
+			ref="deleteModal"
+			:toBeDeletedId="toBeDeletedId"
+			:toBeDeletedName="toBeDeletedName"
+			@update="updateData"
+			@close="openDeleteModal = false"
+		/>
+	</div>
+	<div id="here"></div>
 	<div class="bg-white rounded-lg justify-center">
 		<!-- Create Product Button -->
 		<div class="flex justify-end">
@@ -85,16 +130,15 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 			</NuxtLink>
 		</div>
 		<!-- Table Main Component -->
-		<div class="flex flex-cols justify-center">
+		<div v-if="status === 'success'" class="flex flex-cols justify-center">
 			<table class="table-fixed mx-10 border-collapse w-11/12">
 				<!-- Table Header -->
 				<thead class="border-b-4">
 					<tr class="justify-between">
 						<th class="flex justify-between text-center w-3/12 p-4">
 							<p>Name</p>
-							<button><i class="pi pi-angle-up"></i></button>
 						</th>
-						<th class="text-center w-6/12 p-4"><p>Desciption</p></th>
+						<th class="text-center w-6/12 p-4"><p>Description</p></th>
 						<th class="text-center w-3/12 p-4"><p>Price</p></th>
 						<th class="text-left w-1/12 p-4"></th>
 					</tr>
@@ -102,7 +146,7 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 				<!-- Table Body -->
 				<tbody>
 					<tr
-						v-for="(product, index) in products.values"
+						v-for="(product, index) in products.productsData"
 						:key="product.id"
 						class="border-b-2"
 					>
@@ -132,10 +176,15 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 									</NuxtLink>
 								</li>
 								<li>
-									<button class="flex items-center px-4 py-2">
+									<button
+										@click="toggleDeleteModal(product.id, product.name)"
+										class="flex items-center px-4 py-2"
+									>
 										<i class="pi pi-trash pr-3" style="color: red"></i>
 										<div class="text-red-500">Delete</div>
 									</button>
+									<!-- Delete modal -->
+									<!-- <TestModal v-if="openDeleteModal" ref="deleteModal" /> -->
 								</li>
 							</ul>
 						</td>
@@ -144,7 +193,7 @@ onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
 			</table>
 		</div>
 		<!-- Pagination menu/navigation -->
-		<div>
+		<div v-if="status === 'success'">
 			<div class="flex items-center justify-end mt-6 mr-10 pb-6">
 				<!-- Rows per page options -->
 				<div class="flex items-center border-2 rounded-md py-1 px-2 m-3">

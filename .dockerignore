@@ -1,0 +1,7 @@
+.env
+.gitignore
+kubernetes
+/node_modules
+/.nuxt
+/.output
+README.md

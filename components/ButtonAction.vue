@@ -37,9 +37,9 @@ const textColorVariants = {
 };
 const emit = defineEmits(["click"]);
 
-const handleClick = () => {
+const handleClick = async () => {
 	if (props.action) {
-		props.action();
+		await props.action();
 	}
 	emit("click");
 };
