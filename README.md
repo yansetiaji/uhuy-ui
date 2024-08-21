@@ -141,4 +141,4 @@ kubectl create -f Ingress.yaml
 
 ![kube svc](./docs-assets/kube_ingress.png)
 
-Access via [Public Endpoint](#public-endpoint)
+Access via [Public Endpoint](#uhuy-ui)
