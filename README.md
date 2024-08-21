@@ -1,6 +1,6 @@
 # Uhuy UI
 
-## Public Endpoint (SSL not configured, please use HTTP)
+## Public Endpoint (SSL not configured, please use HTTP, or the backend request will be failed)
 
 - Via IngressController: [http://uhuy-ui.cicicuit.tech](http://uhuy-ui.cicicuit.tech)
 - Via NodePort: [http://uhuy-ui.cicicuit.tech:30000](http://cicicuit.tech:30001)
