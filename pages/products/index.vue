@@ -18,7 +18,7 @@ watch(rowsPerPage, async () => {
 	products.value = newProducts;
 });
 
-// Handle emit update
+// // Handle emit update
 const updateData = async (value) => {
 	console.log("lagi update", value);
 	try {
@@ -33,10 +33,6 @@ const updateData = async (value) => {
 	}
 };
 
-// const updateData = (value) => {
-// 	console.log("Parent received update:", value);
-// };
-
 // Handle pageNumber change
 const changePageNum = (num) => {
 	if (
@@ -47,6 +43,11 @@ const changePageNum = (num) => {
 	}
 
 	pageNumber.value += num;
+};
+
+// Handle close
+const handleClose = () => {
+	openDeleteModal.value = false;
 };
 
 // Watch if pageNumber value updated to reload the new data
@@ -72,7 +73,6 @@ const toggleDropdown = (index) => {
 };
 
 // Toggle data deletion
-const showModal = ref(false);
 const openDeleteModal = useState("openDeleteModal", () => false);
 const toBeDeletedId = useState("toBeDeletedId", () => null);
 const toBeDeletedName = useState("toBeDeletedName", () => null);
@@ -80,48 +80,20 @@ const toggleDeleteModal = (productId, productName) => {
 	toBeDeletedName.value = productName;
 	toBeDeletedId.value = productId;
 	openDeleteModal.value = true;
-	// showModal.value = true;
 };
-
-// Pagination Bar Dropdown
-// const openPaginationDropdown = useState("openPaginationDropdown", () => null);
-// const togglePaginationDropdown = () => {
-// 	openPaginationDropdown.value = !openPaginationDropdown.value;
-// };
 
 // Row dropdown removal using vueUse onClickOutside
 // This will help to remove row dropdown if we click outside the row dropdown
 // https://vueuse.org/core/onClickOutside/
 const rowDropdown = useState("rowDropdown", () => null);
-// const paginationDropdown = useState("paginationDropdown", () => null);
-// const deleteModal = useState("deleteModal", () => null);
 onClickOutside(rowDropdown, () => (openDropdown.value = false));
-// onClickOutside(paginationDropdown, () => (paginationDropdown.value = false));
-// onClickOutside(deleteModal, () => {
-// 	console.log("oco");
-// 	// openDeleteModal.value = false;
-// 	// toBeDeletedId.value = null;
-// });
-// console.log(products.value.totalLength);
 </script>
 
 <template>
 	<!-- Page Title -->
 	<h2 class="text-black text-2xl bg-gray-100 py-6">Products</h2>
-	<TestComponent @halooo="updateData" />
 	<!-- Table Background -->
-	<!-- Delete modal -->
-	<div>
-		<TestModal
-			v-if="openDeleteModal"
-			ref="deleteModal"
-			:toBeDeletedId="toBeDeletedId"
-			:toBeDeletedName="toBeDeletedName"
-			@update="updateData"
-			@close="openDeleteModal = false"
-		/>
-	</div>
-	<div id="here"></div>
+
 	<div class="bg-white rounded-lg justify-center">
 		<!-- Create Product Button -->
 		<div class="flex justify-end">
@@ -152,6 +124,7 @@ onClickOutside(rowDropdown, () => (openDropdown.value = false));
 					>
 						<td class="px-4 py-2">{{ product.name }}</td>
 						<td class="px-4 py-2">{{ product.description }}</td>
+						<!-- Always show 2 decimal digits -->
 						<td class="px-4 py-2 text-right">
 							{{ product.price.toFixed(2) }}
 						</td>
@@ -232,5 +205,16 @@ onClickOutside(rowDropdown, () => (openDropdown.value = false));
 				</div>
 			</div>
 		</div>
+		<!-- Delete modal -->
+		<div>
+			<DeleteModal
+				v-if="openDeleteModal"
+				:toBeDeletedId="toBeDeletedId"
+				:toBeDeletedName="toBeDeletedName"
+				@update="updateData"
+				@close="handleClose"
+			/>
+		</div>
+		<div id="deletemodal"></div>
 	</div>
 </template>

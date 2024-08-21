@@ -12,6 +12,10 @@ const props = defineProps({
 		type: Function,
 		default: null,
 	},
+	target: {
+		type: String,
+		default: null,
+	},
 });
 </script>
 
@@ -20,6 +24,7 @@ const props = defineProps({
 		:to="linkTo"
 		class="text-black px-2 py-1 rounded-full hover:bg-black hover:text-white"
 		@click="onClickFunction"
+		:target="target"
 		>{{ linkText }}</NuxtLink
 	>
 </template>

@@ -18,7 +18,7 @@ spec:
           ports:
             - containerPort: 3000
           env:
-            - name: BACKEND_HOST
+            - name: NUXT_PUBLIC_BACKEND_HOST
               valueFrom:
                 configMapKeyRef:
                   name: uhuy-ui-configmap 

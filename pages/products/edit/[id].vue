@@ -52,6 +52,7 @@
 						class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
 					/>
 				</div>
+				<!-- Submission field -->
 				<div class="justify-end flex flex-col items-center">
 					<p v-if="submissionStatus === 'success'" class="mt-4 text-green-600">
 						{{ submissionMessage }}
@@ -74,10 +75,12 @@
 </template>
 <script setup>
 const route = useRoute();
+
 const backendHost = useRuntimeConfig().public.backendHost;
 const inputNameWarning = useState("inputNameWarning", () => null);
 const inputDescriptionWarning = useState("inputDescriptionWarning", () => null);
 
+// To handle visualization and button disable/enable
 const submissionStatus = ref("");
 const submissionMessage = ref("");
 const isSubmitting = ref(false);
@@ -90,9 +93,10 @@ const { error, data, status } = await useFetch(
 	}
 );
 
-const inputName = ref(data.value.Name);
-const inputDescription = ref(data.value.Description);
-const inputPrice = ref(data.value.Price);
+// Form value default
+const inputName = ref(data.value.name);
+const inputDescription = ref(data.value.description);
+const inputPrice = ref(data.value.price);
 
 // // Banned input chars
 var bannedCharsDict = {};
@@ -114,7 +118,6 @@ const filterInput = (event) => {
 	// split and check
 	var bannedCharsContained = inputValue.split("");
 
-	// .filter((char) => bannedChars.includes(char));
 	// Filter to unique only
 	bannedCharsContained = Array.from(new Set(bannedCharsContained)).filter(
 		(char) => bannedChars.includes(char)
@@ -138,6 +141,7 @@ const filterInput = (event) => {
 	}
 };
 
+// Submission PUT request
 const handleSubmit = async () => {
 	isSubmitting.value = true;
 	const { error, data, status } = await useFetch(

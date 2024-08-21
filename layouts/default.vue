@@ -29,8 +29,16 @@ const toggleBurger = () => {
 				<!-- Medium to large screen menu link, hidden on small screen -->
 				<div class="hidden md:flex space-x-4">
 					<NavbarDesktopLink linkTo="/products" linkText="Products" />
-					<NavbarDesktopLink linkTo="/information" linkText="Information" />
-					<NavbarDesktopLink linkTo="/about" linkText="About" />
+					<NavbarDesktopLink
+						linkTo="https://github.com/yansetiaji/uhuy-service"
+						linkText="Backend Repo"
+						target="_blank"
+					/>
+					<NavbarDesktopLink
+						linkTo="https://github.com/yansetiaji/uhuy-ui"
+						linkText="Frontend Repo"
+						target="_blank"
+					/>
 				</div>
 
 				<!-- Small sreen menu link, hidden on medium to large screen -->
@@ -52,13 +60,15 @@ const toggleBurger = () => {
 							:onClickFunction="toggleBurger"
 						/>
 						<BurgerMenu
-							to="/information"
-							linkText="Information"
+							to="https://github.com/yansetiaji/uhuy-service"
+							target="_blank"
+							linkText="Backend Repo"
 							:onClickFunction="toggleBurger"
 						/>
 						<BurgerMenu
-							to="/about"
-							linkText="About"
+							to="https://github.com/yansetiaji/uhuy-ui"
+							target="_blank"
+							linkText="Frontend Repo"
 							:onClickFunction="toggleBurger"
 						/>
 						<BurgerMenu linkText="Back" :onClickFunction="toggleBurger" />

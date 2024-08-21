@@ -13,8 +13,17 @@
 		</div>
 		<!-- Navigation Button -->
 		<div class="flex flex-row space-x-5 py-10">
-			<ButtonLink linkTo="/products/" linkText="Go to products" />
-			<ButtonLink linkTo="/information/" linkText="Go to information" />
+			<ButtonLink linkTo="/products/" linkText="Go to Products" />
+			<ButtonLink
+				linkTo="https://github.com/yansetiaji/uhuy-service"
+				target="_blank"
+				linkText="Go to Backend Repo"
+			/>
+			<ButtonLink
+				linkTo="https://github.com/yansetiaji/uhuy-ui"
+				target="_blank"
+				linkText="Go to Frontend Repo"
+			/>
 		</div>
 	</div>
 </template>

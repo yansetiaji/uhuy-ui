@@ -1,13 +1,14 @@
 <template>
-	<Teleport to="#here">
+	<Teleport to="#deletemodal">
 		<!-- Modal Background / Overlay -->
 		<div
-			class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-[10000]"
-			@click="toggleModal"
+			class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center"
 		>
 			<div>
-				<div class="absolute bg-black w-full opacity-70 inset-0 z-0"></div>
+				<div class="absolute bg-black w-full opacity-70 inset-0"></div>
+				<!-- Modal content -->
 				<div
+					ref="deleteModal"
 					class="z-[1000] w-full max-w-lg p-3 relative mx-auto my-auto rounded-xl shadow-lg bg-white"
 				>
 					<div>
@@ -45,10 +46,18 @@
 </template>
 
 <script setup>
+import { onClickOutside } from "@vueuse/core";
 const props = defineProps({
 	toBeDeletedId: Number,
 	toBeDeletedName: String,
-	onUpdate: Function,
+});
+
+// Click outside modal to delete
+const deleteModal = useState("deleteModal", () => null);
+onClickOutside(deleteModal, () => {
+	toggleModal();
+	// openDeleteModal.value = false;
+	// toBeDeletedId.value = null;
 });
 
 const { toBeDeletedId, onUpdate } = props;
@@ -60,36 +69,28 @@ const toggleModal = () => {
 	emit("close");
 };
 
-const hi = () => {
-	console.log("hi");
-};
-
-const deletionStatus = ref("");
+// const deletionStatus = ref("");
 const deletionMessage = ref("");
 const isDeleting = ref(false);
 
 const emit = defineEmits(["update", "close"]);
 
 const handleDelete = async (id) => {
-	console.log(emit);
-	console.log(onUpdate.value);
-	isDeleting.value = true;
-	console.log(id);
+	// isDeleting.value = true;
 	const { error, data, status } = await useFetch(
 		`${backendHost}/api/products/${id}`,
 		{
 			method: "DELETE",
 		}
 	);
-	deletionStatus.value = status.value;
+	// deletionStatus.value = status.value;
 	if (status.value === "success") {
 		deletionMessage.value = data.value.message;
 	} else {
 		deletionMessage.value = error.value.data.message;
 	}
-	console.log("before update emitted");
-	emit("update", "halo123");
-	console.log("update emitted");
+	emit("update");
+	emit("close");
 	// isDeleting.value = false;
 };
 </script>
