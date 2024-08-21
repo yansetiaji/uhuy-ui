@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: uhuy-ui
-          image: yansetiaji/uhuy-ui:v0
+          image: yansetiaji/uhuy-ui:v1
           ports:
             - containerPort: 3000
           env:

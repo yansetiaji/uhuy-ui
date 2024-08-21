@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: uhuy-ui-service
+  name: uhuy-ui-service-ci
   namespace: uhuy
 spec:
   selector:

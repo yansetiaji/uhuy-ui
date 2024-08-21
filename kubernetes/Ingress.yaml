@@ -14,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: uhuy-ui-service
+                name: uhuy-ui-service-ci
                 port:
                   number: 3000
